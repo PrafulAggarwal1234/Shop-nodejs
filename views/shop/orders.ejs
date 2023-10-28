@@ -6,15 +6,17 @@
         <% if(orders.length<=0) {%>
         <h1>You haven't placed any order yet!</h1>
         <% } else{%>
-            <ul>
+            <ul class="orders">
                 <% orders.forEach(order=>{ %>
-                    <li>
-                        <h1>#<%= order.id %></h1>
-                        <ul>
-                            <% order.products.forEach(product=>{ %>
-                                <li><%=product.title %> (<%= product.orderItem.quantity %>)</li>
+                    <li class="orders_item">
+                        <h4>Order# <%= order._id %></h4>
+                        <ul class="orders_products">
+                            <% order.items.forEach(item=>{ %>
+                                <li class="orders_products-item"><%=item.title %> (<%= item.quantity %>)</li>
                             <%})%>
-                            <h3>address: <%=order.address%></h3>
+                            <div class="address">
+                                <h3>address: <%=order.address%></h3>
+                            </div>
                         </ul>
                     </li>
                 <%}) %>

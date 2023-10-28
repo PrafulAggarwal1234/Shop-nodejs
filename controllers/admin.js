@@ -7,13 +7,16 @@ exports.getAddProduct =  (req,res,next)=>{
 };
 
 exports.postAddProduct = (req,res)=>{
-    req.user
-    .createProduct({
-        title: req.body.title,
-        price: req.body.price,
-        imageUrl: req.body.imageUrl,
-        desc: req.body.desc
-    })
+    
+    const product=new Product(
+        req.body.title,
+        req.body.price,
+        req.body.desc,
+        req.body.imageUrl,
+        null,
+        req.user._id
+    )
+    product.save()
     .then(result=>{
         console.log("Product Created!")
         res.redirect('/admin/products');
@@ -21,6 +24,7 @@ exports.postAddProduct = (req,res)=>{
     .catch(err=>console.log(err));
    
 }
+
 exports.getEditProduct =  (req,res,next)=>{
     const editMode=req.query.edit;
    if(!editMode){
@@ -28,9 +32,8 @@ exports.getEditProduct =  (req,res,next)=>{
    }
    const prodId=req.params.productId;
 //    Product.findByPk(prodId)
-   req.user.getProducts({where: {id: prodId}})
-   .then((products)=>{
-    const product=products[0];
+   Product.findById(prodId)
+   .then((product)=>{
     if(!product){
         return res.redirect('/');
     }
@@ -45,17 +48,9 @@ exports.getEditProduct =  (req,res,next)=>{
 };
 
 exports.postEditProduct = (req,res,next)=>{
-    Product.update({ 
-        title: req.body.title,
-        price: req.body.price,
-        imageUrl: req.body.imageUrl,
-        desc: req.body.desc
-    },
-    {
-        where:{
-            id: req.body.id
-        }
-    })
+
+    const product = new Product(req.body.title,req.body.price,req.body.desc,req.body.imageUrl,req.body.id);
+    product.save()
     .then(result=>{
         res.redirect('/admin/products');
     })
@@ -64,11 +59,7 @@ exports.postEditProduct = (req,res,next)=>{
 
 exports.postDeleteProduct = (req,res,next) =>{
     const prodId=req.body.id;
-    Product.destroy({
-        where:{
-            id:prodId
-        }
-    })
+    Product.deleteById(prodId)
     .then(result=>{
         res.redirect('/admin/products');
     })
@@ -76,7 +67,7 @@ exports.postDeleteProduct = (req,res,next) =>{
 }
 
 exports.getProducts = (req,res) =>{
-    req.user.getProducts()
+    Product.fetchAll()
     .then((products)=>{
        res.render('admin/products',{
         pageTitle: 'Admin Prooducts',

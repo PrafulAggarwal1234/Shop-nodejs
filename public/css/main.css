@@ -222,6 +222,35 @@ form {
   color: white;
 }
 
+.orders{
+  display: flex;
+  flex-direction: column;
+}
+
+.orders_item{
+  margin-top: 0.5rem;
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+}
+.orders_products{
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+.orders_products-item{
+  color: teal;
+  padding: 10px;
+  margin-top: 0.5rem;
+  border: 2px solid teal;
+}
+
+.address{
+  margin: 20px 5px;
+  background-color: yellowgreen;
+  padding: 20px;
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;
